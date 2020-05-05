@@ -34,12 +34,12 @@ const PizzaForm = () => {
     });
 
     const formSubmit = e => {
-        e.prevent.default();
+        e.preventDefault();
         axios
             .post("https://reqres.in/api/users", formState)
             .then(res => {
                 setPost(res.data);
-                console.log("success", post);
+                console.log("success", res.data);
                 setFormState({
                     name: "",
                     size: "",
@@ -55,7 +55,7 @@ const PizzaForm = () => {
                     },
                     instructions: "",
                 });
-                setServerError("Success!");
+                setServerError("Your order has been placed");
             })
             .catch(err => {
                 setServerError("Try Again");
@@ -67,7 +67,7 @@ const PizzaForm = () => {
         yup
             .reach(formSchema, e.target.name)
             .validate(e.target.value)
-            .then(valid => {
+            .then(() => {
                 setErrors({
                     ...errors, [e.target.name]: ""
                 });
@@ -99,29 +99,34 @@ const PizzaForm = () => {
         setFormState(newFormData);
     }
 
-    const renderToppings = () => {
-        const toppings = ["cheese", "pepperoni", "sausage", "bacon", "bbq chicken", "pinneaple", "veggies"];
-        return toppings.map((topping, top) => {
-            return (
-                <label key={top}>
-                    {topping}
-                    <input
-                        type="checkbox"
-                        name={topping}
-                        checked={formState.toppings}
-                        onChange={inputChange}
-                    />
-                </label>
-            )
-        })
+    // const renderToppings = () => {
+    //     const toppings = ["cheese", "pepperoni", "sausage", "bacon", "bbq chicken", "pinneaple", "veggies"];
+    //     return toppings.map((topping, top) => {
+    //         return (
+    //             <label key={top}>
+    //                 {topping}
+    //                 <input
+    //                     type="checkbox"
+    //                     name={topping}
+    //                     // checked={formState.toppings}
+    //                     onChange={inputChange}
+    //                     value={
+    //                         ["cheese", "pepperoni", "sausage", "bacon", "bbq chicken", "pinneaple", "veggies"]
+    //                     }
 
-    }
+
+    //                 />
+    //             </label>
+    //         )
+    //     })
+
+    // }
 
 
 
 
     return (
-        <form onSubmit={formSubmit}>
+        <form className="pizzaForm" onSubmit={formSubmit}>
             {serverError ? <p className="error">{serverError}</p> : null}
             <label htmlFor="name">
                 Name
@@ -130,6 +135,7 @@ const PizzaForm = () => {
                     name="name"
                     value={formState.name}
                     onChange={inputChange}
+                    data-cy="name"
                 />
                 {errors.name.length > 0 ? (<p className="error">{errors.name}</p>) : null}
 
@@ -159,11 +165,42 @@ const PizzaForm = () => {
 
             </label>
             <label htmlFor="toppings" className="toppings">
+                <br />
                 Toppings:
-               {renderToppings()}
+                <input
+                    type="checkbox" name="toppings" value="cheese" onChange={inputChange}
+                />
+                            Cheese
+                <input
+                    type="checkbox" name="toppings" value="pepperoni" onChange={inputChange}
+                />
+                            Pepperoni
+                <input
+                    type="checkbox" name="toppings" value="bacon" onChange={inputChange}
+                />
+                            Bacon
+                <input
+                    type="checkbox" name="toppings" value="sausage" onChange={inputChange}
+                />
+                            Sasuage
+                <input
+                    type="checkbox" name="toppings" value="bbq chicken" onChange={inputChange}
+                />
+                            BBQ chicken
+                <input
+                    type="checkbox" name="toppings" value="pineapple" onChange={inputChange}
+                />
+                            Pineapple
+                <input
+                    type="checkbox" name="toppings" value="veggies" onChange={inputChange}
+                />
+                            Veggies
+               {/* {renderToppings()} */}
             </label>
             <label htmlFor="instructions">
+                <br />
                 Additional Instructions
+                <br />
                 <textarea
                     name="instructions"
                     value={formState.instructions}
@@ -175,7 +212,7 @@ const PizzaForm = () => {
                 ) : null}
 
             </label>
-            <button disabled={buttonDisabled} type="submit">Submit Order</button>
+            <button data-cy="submit" disabled={buttonDisabled} type="submit">Submit Order</button>
         </form>
     )
 }

@@ -5,15 +5,15 @@ const NavBar = () => {
     // const { location } = useHistory
 
     return (
-        <div>
+        <div className="NavBar">
             <Link to="/">
-                <h1>Lambda Eats Fresh</h1>
+                <h1 className="Title">Lambda Eats Fresh</h1>
             </Link>
 
-            <nav>
-                <Link to="/">Home</Link>
-                <br />
-                <Link to="/pizza">Pizza Order</Link>
+            <nav className="nav-tab">
+                <Link className="homelink" to="/">Home</Link>
+
+                <Link className="pizzalink" to="/pizza">Pizza Order</Link>
             </nav>
         </div>
     )
